@@ -5,13 +5,15 @@ import {authentication } from '../firebase'
 const Login = () => {
     
     const [openmodal, setopenmodal] = useState(false);
-    const [modalstateno, setmodalstateno] = useState(1);
+    const [modalStateNo, setModalStateNo] = useState(1);
     const [otp ,setOtp]=useState("");
     const [mobileNo,setMobileNo]=useState("");
+    const [otpModal,setOtpModal]=useState(false);
     const toggle = () => {
         setopenmodal(false);
-        setmodalstateno(1);
+        setModalStateNo(1);
       };
+      
       const ConfigureRecaptcha=async()=>{
           console.log("mdadf",mobileNo)
         window.recaptchaVerifier =await new RecaptchaVerifier('sign-in-button', {
@@ -35,10 +37,12 @@ const Login = () => {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
+            
             // ...
           }).catch((error) => {
             // Error; SMS not sent
             console.log(error)
+            // alert("Otp you have entered is  wrong kindly re-enter the correct otp");
             // ...
           });   
       }
@@ -49,19 +53,31 @@ const Login = () => {
             // User signed in successfully.
             const user = result.user;
             console.log(user)
+            setOtpModal(false);
+            setModalStateNo(1);
+           
             // ...
           }).catch((error) => {
             // User couldn't sign in (bad verification code?)
             // ...
             console.log(error)
+            alert("Otp you have entered is  wrong kindly re-enter the correct otp");
+        
           });
       }
   return (
       <>
     <div>
-    <h2>Login Form</h2>
-    <label>Mobile</label>
-       <input value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} required maxLength="10"
+    <div className="row mt-4">
+    <div className="d-flex justify-content-center">    <h2 className="">   Login Form
+  </h2>
+    </div>
+</div>
+
+   <div className="d-flex justify-content-center "><button onClick={()=>{setopenmodal(true)}} className=" bg-dark text-light mt-4">Click on me to Login</button></div>
+    
+    {/* <label>Mobile</label>
+       <input value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} required maxLength="10" minLength="10"
                                     onKeyPress={(event) => {
                                       if (!/[0-9]/.test(event.key)) {
                                         event.preventDefault();
@@ -69,30 +85,52 @@ const Login = () => {
                                     }} />
     <button onClick={(e)=>{generateOtp(e);}}>Generate Otp</button>
        <label>Otp</label>
-       <input value={otp} onChange={(e)=>{setOtp(e.target.value)}} maxLength="6"
+       <input value={otp} onChange={(e)=>{setOtp(e.target.value)}} maxLength="6" minLength="6"
                                     onKeyPress={(event) => {
                                       if (!/[0-9]/.test(event.key)) {
                                         event.preventDefault();
                                       }
                                     }}/>
-                                    <button onClick={(e)=>{e.preventDefault();verifyOtp()}}>Verify Otp</button>
+                                    <button onClick={(e)=>{e.preventDefault();verifyOtp()}}>Verify Otp</button> */}
     </div>
     <div id="sign-in-button"></div>
-    
-    {/* <Modal isOpen={openmodal} toggle={toggle}>
+    {modalStateNo==1?  <Modal isOpen={openmodal} toggle={toggle} className="container">
  
-    <ModalHeader toggle={toggle}>Login Using Otp</ModalHeader>
-          <ModalBody>
-          <label>Enter Mobile No</label>
-          <input value={mobileNo} />
-          
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>Do Something</Button>{' '}
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-          </ModalFooter>
+ <ModalHeader toggle={()=>toggle()}>Login Using Otp</ModalHeader>
+      <ModalBody>
+       <label>Enter Mobile No</label>
+       <input value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} required maxLength="10" minLength="10"
+                                 onKeyPress={(event) => {
+                                   if (!/[0-9]/.test(event.key)) {
+                                     event.preventDefault();
+                                   }
+                                 }} />
+       </ModalBody>
+       <ModalFooter>
+         <Button color="primary" onClick={(e)=>{generateOtp(e);setModalStateNo(2);setOtpModal(true)}}>Generate Otp</Button>{' '}
+         <Button color="secondary" onClick={toggle}>Cancel</Button>
+       </ModalFooter>
 
-    </Modal> */}
+ </Modal> :""}   
+  
+    {modalStateNo==2?  <Modal isOpen={otpModal} toggle={()=>{setOtpModal(false);setModalStateNo(1);}} className="container">
+ 
+ <ModalHeader toggle={()=>{setOtpModal(false);setModalStateNo(1);}}>Login Using Otp</ModalHeader>
+       <ModalBody>
+       <label>Enter OTP</label>
+       <input value={otp} onChange={(e)=>{setOtp(e.target.value)}} required maxLength="6" minLength="6"
+                                 onKeyPress={(event) => {
+                                   if (!/[0-9]/.test(event.key)) {
+                                     event.preventDefault();
+                                   }
+                                 }} />
+       </ModalBody>
+       <ModalFooter>
+         <Button color="primary" onClick={(e)=>{e.preventDefault();verifyOtp();}}>Generate Otp</Button>{' '}
+         <Button color="secondary" onClick={()=>{setOtpModal(false);setModalStateNo(1);}}>Cancel</Button>
+       </ModalFooter>
+
+ </Modal> :""}
     </>
   )
 }
