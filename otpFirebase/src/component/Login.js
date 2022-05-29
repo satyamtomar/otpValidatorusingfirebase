@@ -187,8 +187,8 @@ const Login = () => {
     Login Using Otp
   </div>
    <div class='content'>
-   <label>Enter Mobile No</label>
-       <input value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} required maxLength="10" minLength="10"
+   <label>Enter Mobile No </label>
+       <input className='content-input' value={mobileNo} onChange={(e)=>{setMobileNo(e.target.value)}} required maxLength="10" minLength="10"
                                  onKeyPress={(event) => {
                                    if (!/[0-9]/.test(event.key)) {
                                      event.preventDefault();
