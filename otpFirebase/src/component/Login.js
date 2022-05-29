@@ -205,10 +205,13 @@ const Login = () => {
  </Modal>
  :""}
  {modalStateNo==2?
- <Modal isOpen={otpModal} toggle={()=>{setOtpModal(false);setModalStateNo(1);}} className="container">
+ <Modal isOpen={otpModal} toggle={()=>{setOtpModal(false);setModalStateNo(1);}} className="modal-dialog-centered">
+ <div class='card'>
+  <div class='header'>
+    Login Using Otp
+  </div>
+  <div class='content'>
  
- <ModalHeader toggle={()=>{setOtpModal(false);setModalStateNo(1);}}>Login Using Otp</ModalHeader>
-       <ModalBody>
        <label>Enter OTP</label>
        <input value={otp} onChange={(e)=>{setOtp(e.target.value)}} required maxLength="6" minLength="6"
                                  onKeyPress={(event) => {
@@ -216,12 +219,12 @@ const Login = () => {
                                      event.preventDefault();
                                    }
                                  }} />
-       </ModalBody>
-       <ModalFooter>
-         <Button color="primary" onClick={(e)=>{e.preventDefault();verifyOtp();}}>Confirm Otp</Button>{' '}
-         <Button color="secondary" onClick={(e)=>{generateOtpUsingFirebase(e)}}>Resend Otp</Button>
-       </ModalFooter>
-
+      </div>
+       <div className='actions d-flex'>
+         <a class='nah' onClick={(e)=>{e.preventDefault();verifyOtp();}}>Confirm Otp</a>{' '}
+         <a  onClick={(e)=>{generateOtpUsingFirebase(e)}}>Resend Otp</a>
+       </div>
+</div>
  </Modal>
 
  :""}
